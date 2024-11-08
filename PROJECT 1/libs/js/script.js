@@ -4,7 +4,6 @@ let userCountryLayer = null;
 let userLocationFound = false; // Track if user location is found
 let geoJsonLoaded = false; // Track if GeoJSON is loaded
 
-// Show loader while the page is loading
 document.getElementById('preloader').style.display = 'flex';
 
 // Initialize Leaflet Map with faster zoom settings
@@ -137,7 +136,6 @@ map.on('click', function (e) {
     // Place the marker
     marker = L.marker(clickedLatLng).addTo(map);
 
-    // Fetch country data including the flag
     fetchCountryDataWithFlag(clickedLatLng.lat, clickedLatLng.lng);
 });
 
@@ -187,12 +185,12 @@ fetch('libs/js/countryBorders.geojson')
             style: function(feature) {
                 return {
                     fillColor: 'transparent', // Initial color
-                    color: 'transparent', // Default: no border color
+                    color: 'transparent', 
                     weight: 1,
                     fillOpacity: 0.5
                 };
             }
-        }).addTo(map); // Add the layer to your map
+        }).addTo(map); 
 
         data.features.forEach(country => {
             const option = document.createElement('option');
@@ -203,7 +201,6 @@ fetch('libs/js/countryBorders.geojson')
     })
     .catch(error => console.error("Error loading GeoJSON:", error));
 
-// Listen for dropdown changes to fetch data by country selection
 document.getElementById('countryDropdown').addEventListener('change', function() {
     const selectedISOCode = this.value;
     if (selectedISOCode !== "none") fetchCountryDataByISO(selectedISOCode);
@@ -215,7 +212,7 @@ function fetchCountryDataByISO(isoCode) {
         url: 'libs/php/iso_code.php',
         type: 'GET',
         data: { iso_code: isoCode },
-        dataType: 'json', // Expect JSON response
+        dataType: 'json', 
         success: function(data) {
             if (data.country_code) {
                 highlightCountryOnMap(data.country_code); // Highlight the selected country on the map
@@ -251,10 +248,10 @@ function highlightCountryOnMap(countryCode) {
     });
 
     if (countryLayer) {
-        // Highlight the selected country in red with a visible border
+        
         countryLayer.setStyle({
             fillColor: 'red', // Change the highlight color to red
-            fillOpacity: 0.6, // Optional: adjust opacity
+            fillOpacity: 0.6, 
             color: '#000', // Border color for the highlighted country
             weight: 1 // Border weight for the highlighted country
         });
@@ -262,7 +259,6 @@ function highlightCountryOnMap(countryCode) {
         // Store the currently highlighted country layer as the previous one
         previouslyHighlightedLayer = countryLayer;
 
-        // Optional: Set the map view to the highlighted country
         map.fitBounds(countryLayer.getBounds()); // Adjusts map view to the country bounds
     } else {
         console.error("Country not found in GeoJSON layer.");
@@ -291,7 +287,7 @@ function getUserLocationISO() {
 
 // Function to fetch ISO code by coordinates
 function fetchISOCodeByCoordinates(lat, lng) {
-    // Assuming 'libs/php/get_iso_code.php' takes lat/lng and returns the ISO code as JSON
+
     $.ajax({
         url: 'libs/php/get_iso_code.php',
         type: 'GET',
@@ -299,7 +295,7 @@ function fetchISOCodeByCoordinates(lat, lng) {
         dataType: 'json',
         success: function (data) {
             if (data && data.iso_code) {
-                setDropdownToUserCountry(data.iso_code); // Set dropdown if ISO code is found
+                setDropdownToUserCountry(data.iso_code); 
             } else {
                 console.error("ISO code not found for coordinates.");
             }
@@ -314,13 +310,12 @@ function fetchISOCodeByCoordinates(lat, lng) {
 function setDropdownToUserCountry(isoCode) {
     const dropdown = document.getElementById('countryDropdown');
     dropdown.value = isoCode;
-    highlightCountryOnMap(isoCode); // Optionally highlight the country on map
+    highlightCountryOnMap(isoCode); 
 }
 
 // Initial call to get user location and set dropdown
 getUserLocationISO();
 
-// Event listener for dropdown changes to fetch data by country selection
 document.getElementById('countryDropdown').addEventListener('change', function() {
     const selectedISOCode = this.value;
     if (selectedISOCode !== "none") fetchCountryDataByISO(selectedISOCode);
@@ -361,7 +356,6 @@ function fetchCountryData(lat, lng) {
                 { name: 'Country', value: data.country || 'N/A' },
                 { name: 'Capital', value: data.capital || 'N/A' },
                 { name: 'Currency', value: data.currency || 'N/A' },
-                // Currency Converter should be inserted here
                 { name: 'Population', value: data.population || 'N/A' },
                 { name: 'Continent', value: data.continent || 'N/A' },
                 { name: 'Region', value: data.region || 'N/A' },
@@ -370,7 +364,7 @@ function fetchCountryData(lat, lng) {
                 { name: 'Flag', value: data.flag || 'N/A' }
             ];
 
-            const currencyCode = data.currency.split(' / ')[2]; // Extract ISO code
+            const currencyCode = data.currency.split(' / ')[2]; 
             loadCurrencyOptions(currencyCode); // Populate dropdowns with all currencies
 
             const wikiLinks = data.wikiTitles || [];
@@ -400,7 +394,6 @@ function fetchCountryData(lat, lng) {
                 row.appendChild(valueCell);
                 tableBody.appendChild(row);
 
-                // Insert Currency Converter after Currency row and before Population row
                 if (item.name === 'Currency') {
                     const currencyConverterHtml = `
                         <tr>
@@ -499,16 +492,13 @@ function fetchWeatherData(lat, lng) {
 function displayWeatherData(data) {
     const weatherContainer = document.querySelector('.weather-container');
 
-    // Ensure the container element exists
     if (!weatherContainer) {
         console.error("Weather container element is missing.");
         return;
     }
 
-    // Clear any previous data in the container
     weatherContainer.innerHTML = '';
 
-    // Create main weather display
     const cityHeader = document.createElement('div');
     cityHeader.className = 'weather-header';
     cityHeader.innerHTML = `<h2>Weather Forecast</h2>`;
@@ -531,11 +521,9 @@ function displayWeatherData(data) {
         </div>
     `;
 
-    // Forecast details (Morning, Afternoon, Evening) 
     const forecastContainer = document.createElement('div');
     forecastContainer.className = 'forecast-container';
 
-    // Check if forecast data exists and populate it
     const forecastData = [
         {
             time: 'Morning',
@@ -557,7 +545,6 @@ function displayWeatherData(data) {
         }
     ];
 
-    // Iterate through the forecast data and append it to the forecast container
     forecastData.forEach(forecast => {
         const forecastDiv = document.createElement('div');
         forecastDiv.className = 'forecast';
@@ -570,12 +557,10 @@ function displayWeatherData(data) {
         forecastContainer.appendChild(forecastDiv);
     });
 
-    // Append the main weather info and forecast container to the weather container
     weatherContainer.appendChild(cityHeader);
     weatherContainer.appendChild(mainWeatherInfo);
     weatherContainer.appendChild(forecastContainer);
 
-    // Show the weather container
     weatherContainer.style.display = 'block';
 
     // Position the weather container close to the marker
@@ -594,21 +579,18 @@ function displayWeatherData(data) {
     }
 }
 
-// Helper function to get weather icon based on description
 function getWeatherIcon(description) {
-    if (description.toLowerCase().includes("clear")) return '🌅';  // Clear sky
-    if (description.toLowerCase().includes("clouds")) return '☁️'; // Cloudy
+    if (description.toLowerCase().includes("clear")) return '🌅';  
+    if (description.toLowerCase().includes("clouds")) return '☁️'; 
     if (description.toLowerCase().includes("rain")) return '🌧️';
-    if (description.toLowerCase().includes("mist")) return '🌧️';   // Rainy
-    if (description.toLowerCase().includes("snow")) return '❄️';   // Snowy
-    return '🌥️'; // Default icon for mixed weather
+    if (description.toLowerCase().includes("mist")) return '🌧️';   
+    if (description.toLowerCase().includes("snow")) return '❄️';   
+    return '🌥️'; 
 }
 
-
-// Function to check if loading is complete
 function checkLoadingComplete() {
     if (geoJsonLoaded && userLocationFound) {
-        // Hide loader once GeoJSON and user location data are loaded
+        
         document.getElementById('preloader').style.display = 'none';
     }
 }
@@ -616,7 +598,7 @@ function checkLoadingComplete() {
 // Button click to fetch country and weather data
 document.getElementById('get-data-btn').onclick = function () {
     if (clickedLatLng) {
-        // Fetch country and weather data for clicked location without showing loader again
+        
         fetchCountryData(clickedLatLng.lat, clickedLatLng.lng);
         fetchWeatherData(clickedLatLng.lat, clickedLatLng.lng);
     } else {
@@ -649,26 +631,22 @@ function fetchNewsData(lat, lng) {
     }
 }
 
-// Function to display news data in the table
 function displayNewsData(articles) {
     const newsTableBody = $('#newsTableTbody');
-    newsTableBody.empty(); // Clear existing rows to avoid duplicates
+    newsTableBody.empty(); 
 
     articles.slice(0, 5).forEach(article => {
-        // Create a new table row
+
         const row = $('<tr></tr>');
-        
-        // Populate each cell with article data
+
         row.append($('<td></td>').text(article.title));
         row.append(
             $('<td></td>').html(`<a href="${article.link}" target="_blank">Read More</a>`)
         );
 
-        // Append the row to the table body
         newsTableBody.append(row);
     });
 
-    // Show the news table and hide the data table
     $('#newsTable').show();
     $('#data-table').hide();
     $('.weather-container').hide();
@@ -676,14 +654,13 @@ function displayNewsData(articles) {
 
 // Event listener for the News button
 $('#newsButton').on('click', function () {
-    if (clickedLatLng) { // Assuming clickedLatLng is available as the current coordinates
+    if (clickedLatLng) { 
         fetchNewsData(clickedLatLng.lat, clickedLatLng.lng);
     } else {
         alert('Coordinates not available. Please ensure the marker is set on the map.');
     }
 });
 
-// Toggle function for the Data button to show the data table
 $('#get-data-btn').on('click', function () {
     $('#newsTable').hide();
     $('#data-table').show();
@@ -701,7 +678,7 @@ function getUserLocation() {
                 // Mark user location on the map
                 marker = L.marker([lat, lng]).addTo(map);
                 userLocationFound = true; // Set location found
-                checkLoadingComplete(); // Check if all loading is complete
+                checkLoadingComplete(); 
 
                 // Fetch country and weather data for user's location
                 fetchCountryData(lat, lng);
@@ -715,13 +692,13 @@ function getUserLocation() {
                 console.error('Error getting user location:', error);
                 alert('Unable to retrieve your location. Showing default map view.');
                 userLocationFound = true; // Set location found
-                checkLoadingComplete(); // Check if all loading is complete
+                checkLoadingComplete(); 
             }
         );
     } else {
         alert("Geolocation is not supported by this browser.");
         userLocationFound = true; // Set location found
-        checkLoadingComplete(); // Check if all loading is complete
+        checkLoadingComplete(); 
     }
 }
 
