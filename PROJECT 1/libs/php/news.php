@@ -1,6 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json'); // Set the content type to JSON
+header('Content-Type: application/json'); 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
