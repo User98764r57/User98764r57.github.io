@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Data Retrieval</title>
+    <link rel="stylesheet" href="libs/css/styles.css"> <!-- Link to CSS file -->
+    <link rel="stylesheets" href="libs/css/bootstrap.min.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+
+    <!-- Leaflet Map Container -->
+    <div id="map"></div> 
+    
+    <!-- Country Selection Dropdown -->
+    <select id="countryDropdown">
+        <option value="none">None</option>
+    </select>
+
+    <!-- Table to display the data -->
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Data Name</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+
+    <div class="weather-container">
+    <!-- Weather data will be dynamically inserted by JavaScript here -->
+</div>
+    
+    <!-- Button to get the data -->
+    <button id="get-data-btn">Get Data</button>  
+
+    <!-- News Table (Hidden by Default) -->
+    <table id="newsTable">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody id="newsTableTbody"></tbody>
+    </table>
+
+
+    <!-- News Button -->
+    <button id="newsButton">News</button>
+
+
+    <div id="preloader">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- jQuery 3.7.1 -->
+    <script src="libs/js/jQuery 3.7.1.js"></script> <!-- Ensure the path is correct -->
+    <!-- Your JavaScript file -->
+    <script src="libs/js/script.js"></script>
+    <script src="libs/js/bootstrap.min.js"></script>
+</body>
+</html>
