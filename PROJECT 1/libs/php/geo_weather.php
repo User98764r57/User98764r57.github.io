@@ -81,8 +81,8 @@ if (isset($_GET['lat']) && isset($_GET['lng'])) {
                             'temperature_k' => $forecast['main']['temp'] + 273.15, // Temperature in Kelvin
                             'wind_speed_m_s' => $forecast['wind']['speed'], // Wind speed in m/s
                             'wind_speed_mph' => $forecast['wind']['speed'] * 2.23694, // Wind speed in mph
-                            'weather' => $forecast['weather'][0]['main'], // Weather condition (Clear, Rain, etc.)
-                            'description' => $forecast['weather'][0]['description'] // Weather description (e.g., clear sky)
+                            'weather' => $forecast['weather'][0]['main'], // Weather condition
+                            'description' => $forecast['weather'][0]['description'] 
                         ];
                     }
                 }
